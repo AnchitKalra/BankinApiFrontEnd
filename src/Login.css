@@ -1,0 +1,15 @@
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    background: gold;
+}
+.formcontrol{
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+#submitbtn{
+    margin-top: 5%;
+    margin-bottom: 1%;
+}
