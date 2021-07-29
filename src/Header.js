@@ -15,6 +15,7 @@ class Header extends Component {
             src="./star.png"
             height="50px"
             width="50px"
+            alt="logo"
             onClick={this.imageClickHandler}
           ></img>
         </span>

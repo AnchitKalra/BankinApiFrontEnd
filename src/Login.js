@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import Header from "./Header";
 import "./Login.css";
 import FormControl from "@material-ui/core/FormControl";
-import { FormGroup, InputLabel, Link } from "@material-ui/core";
+import { FormGroup, InputLabel } from "@material-ui/core";
 import { Input } from "@material-ui/core";
 import { FormHelperText } from "@material-ui/core";
 import { Button } from "@material-ui/core";
-import { Redirect } from "react-router-dom";
+
 
 class Login extends Component {
   submitHandler = (e) => {

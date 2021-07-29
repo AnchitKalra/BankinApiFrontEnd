@@ -3,8 +3,12 @@ import "@fontsource/roboto";
 import { Typography } from "@material-ui/core";
 import Header from "./Header";
 import "./Welcome.css";
+import { Button } from "@material-ui/core";
 
 class Welcome extends Component {
+  loginHandler = (e) => {
+    this.props.history.push({ pathname: "/login" });
+  };
   render() {
     return (
       <div>
@@ -18,6 +22,14 @@ class Welcome extends Component {
             <br></br>
             Thank You for chosing Tripti Bank.
           </Typography>
+
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={this.loginHandler}
+          >
+            LOGIN
+          </Button>
         </div>
       </div>
     );
