@@ -18,7 +18,11 @@ class Welcome extends Component {
           <Typography variant="h6">
             Welcome! You have successfully signed up. Your A/C number is:
             <br />
-            <span>{"" + this.props.history.location.response}</span>
+            <span>
+              {this.props.history.location.response === undefined
+                ? this.props.history.push({ pathname: "/" })
+                : this.props.history.location.response}
+            </span>
             <br></br>
             Thank You for chosing Tripti Bank.
           </Typography>
