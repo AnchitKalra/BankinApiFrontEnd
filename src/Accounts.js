@@ -38,7 +38,7 @@ class Accounts extends Component {
         console.log(b);
         if (b.status !== 500) {
           that.setState({
-            successMessage: "Account Successfully Transferred",
+            successMessage: "Amount Successfully Transferred",
             showMessage: true,
           });
         } else {
