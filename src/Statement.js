@@ -11,7 +11,7 @@ class Statement extends Component {
     return (
       <div>
         <Header heading="TRIPTI BANK STATEMENTS" history={this.props.history} />
-        {this.props.location.response !== undefined
+        {this.props.location.response !== undefined &&this.props.location.response.statement !== undefined
           ? this.props.location.response.statement.map((statement) => {
               return (
                 <div key={k++}>

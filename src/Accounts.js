@@ -38,7 +38,7 @@ class Accounts extends Component {
         console.log(b);
         if (b.status !== 500) {
           that.setState({
-            successMessage: "Account Successfully debited",
+            successMessage: "Account Successfully Transferred",
             showMessage: true,
           });
         } else {
@@ -107,7 +107,7 @@ class Accounts extends Component {
         console.log(b);
         if (b.status !== 500) {
           that.setState({
-            successMessage: "Account Successfully transferred",
+            successMessage: "Account Successfully debited",
             showMessage: true,
           });
         } else {
