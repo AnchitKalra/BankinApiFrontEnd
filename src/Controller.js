@@ -8,7 +8,7 @@ import Accounts from "./Accounts";
 class Controller extends Component {
   constructor() {
     super();
-    this.baseUrl = "http://localhost:8080/api/";
+    this.baseUrl = "http://192.168.1.16:8080/api/";
   }
 
   render() {

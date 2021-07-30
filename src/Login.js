@@ -7,8 +7,11 @@ import { Input } from "@material-ui/core";
 import { FormHelperText } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 
-
 class Login extends Component {
+  loginHandler = () => {
+    this.props.history.push({ pathname: "/login" });
+  };
+
   submitHandler = (e) => {
     let that = this;
     e.preventDefault();
@@ -32,7 +35,7 @@ class Login extends Component {
         });
       }
     });
-    xhr.open("POST", "http://localhost:8080/api/signup");
+    xhr.open("POST", this.props.baseUrl + "signup");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
@@ -101,6 +104,17 @@ class Login extends Component {
               </FormControl>
             </FormGroup>
           </form>
+        </div>
+        <div className="login-container">
+          Already have an account?
+          <br />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={this.loginHandler}
+          >
+            LOGIN
+          </Button>
         </div>
       </div>
     );

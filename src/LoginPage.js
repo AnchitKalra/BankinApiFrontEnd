@@ -20,24 +20,28 @@ class LoginPage extends Component {
     console.log(authorization);
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
-        //console.log(this.response);
+        sessionStorage.clear();
         let a = JSON.parse(this.response);
-        console.log(this.getResponseHeader("access-token"));
-        sessionStorage.setItem(
-          "access-token",
-          this.getResponseHeader("access-token")
-        );
-        // that.props.history.push({
-        //   pathname: "/welcome",
-        //   response: a.id,io
-        // });
-        console.log(a);
-        b.props.history.push({
-          pathname: "/accounts",
-        });
+        if (a.status === 500) {
+          alert("Please enter correct Info");
+        } else {
+          sessionStorage.setItem(
+            "access-token",
+            this.getResponseHeader("access-token")
+          );
+
+          // that.props.history.push({
+          //   pathname: "/welcome",
+          //   response: a.id,io
+          // });
+
+          b.props.history.push({
+            pathname: "/accounts",
+          });
+        }
       }
     });
-    xhr.open("POST", "http://localhost:8080/api/login");
+    xhr.open("POST", this.props.baseUrl + "login");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.setRequestHeader("authorization", authorization);
