@@ -6,6 +6,8 @@ import "./Account.css";
 import Snackbar from "@material-ui/core/Snackbar";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
+import { faRupeeSign, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 let i = 1;
 class Accounts extends Component {
@@ -57,6 +59,34 @@ class Accounts extends Component {
     );
     xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhr.send(JSON.stringify(accountRequest));
+  };
+
+  onStatement = (e) => {
+    e.preventDefault();
+    let xhr = new XMLHttpRequest();
+    let that = this;
+    let accountNumber = e.target.account.value;
+    console.log("Hi from oncredit " + accountNumber);
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        let b = JSON.parse(this.response);
+        console.log(b);
+        that.props.history.push({ pathname: "/statement", response: b });
+      }
+    });
+
+    xhr.open(
+      "GET",
+      this.props.baseUrl + "statement?accountNumber=" + accountNumber
+    );
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.setRequestHeader(
+      "authorization",
+      "Bearer " + sessionStorage.getItem("access-token")
+    );
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.send();
   };
 
   onDebit = (e) => {
@@ -155,6 +185,11 @@ class Accounts extends Component {
     a.setAttribute("style", "display : block");
   };
 
+  statementHandler = () => {
+    let a = document.getElementsByClassName("credit-form")[3];
+    a.setAttribute("style", "display : block");
+  };
+
   addAccountHandler = () => {
     let xhr = new XMLHttpRequest();
     let that = this;
@@ -231,9 +266,11 @@ class Accounts extends Component {
                   <ol key={i++}>
                     <li value={i}>
                       Account Number = {acc.accountNumber} <br />
-                      Balance = {acc.balance}
+                      Balance = <FontAwesomeIcon icon={faRupeeSign} />
+                      {acc.balance}
                       <br />
-                      Status = {acc.status} <br />
+                      Status = <FontAwesomeIcon icon={faCircle} />
+                      {acc.status} <br />
                     </li>
                   </ol>
                 );
@@ -378,6 +415,40 @@ class Accounts extends Component {
                   color="primary"
                   type="submit"
                   className="btn"
+                >
+                  SUBMIT
+                </Button>
+              </form>
+            </div>
+            <div>
+              Account Statement?
+              <br />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.statementHandler}
+                id="btn"
+              >
+                STATEMENT
+              </Button>
+              <form className="credit-form" onSubmit={this.onStatement}>
+                <FormGroup style={{ marginLeft: "200px" }}>
+                  <FormControl required={true}>
+                    <InputLabel htmlFor="account" id="label">
+                      Account Number
+                    </InputLabel>
+                    <Input id="account" name="account" />
+                    <FormHelperText htmlFor="account">
+                      The account you wish to get statement from
+                    </FormHelperText>
+                  </FormControl>
+                </FormGroup>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  style={{ marginLeft: "200px" }}
                 >
                   SUBMIT
                 </Button>

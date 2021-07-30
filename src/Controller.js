@@ -4,6 +4,7 @@ import Login from "./Login";
 import Welcome from "./Welcome";
 import LoginPage from "./LoginPage";
 import Accounts from "./Accounts";
+import Statement from "./Statement";
 
 class Controller extends Component {
   constructor() {
@@ -36,6 +37,12 @@ class Controller extends Component {
             exact
             path="/accounts"
             render={(props) => <Accounts {...props} baseUrl={this.baseUrl} />}
+          />
+
+          <Route
+            exact
+            path="/statement"
+            render={(props) => <Statement {...props} baseUrl={this.baseUrl} />}
           />
         </div>
       </Router>

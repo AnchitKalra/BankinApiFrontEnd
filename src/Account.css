@@ -6,6 +6,7 @@
 .main-btn-container{
     display: grid;
     grid-template-columns: auto auto auto auto;
+    grid-row-gap: 50px;
 }
 #label{
     font-size: 11px;
