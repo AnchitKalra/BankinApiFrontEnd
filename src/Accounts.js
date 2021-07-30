@@ -16,6 +16,49 @@ class Accounts extends Component {
     this.setState({ showMessage: false });
   };
 
+  onTransfer = (e) => {
+    e.preventDefault();
+    let xhr = new XMLHttpRequest();
+    let that = this;
+    let account1 = e.target.account1.value;
+    let account2 = e.target.account2.value;
+    let amounts = e.target.amount.value;
+    //console.log("Hi from oncredit " + account1 + amounts);
+    let accountRequest = {
+      from_account_number: account1,
+      to_account_number: account2,
+      amount: amounts,
+    };
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        console.log("HI from 4");
+        let b = JSON.parse(this.response);
+        console.log(b);
+        if (b.status !== 500) {
+          that.setState({
+            successMessage: "Account Successfully debited",
+            showMessage: true,
+          });
+        } else {
+          that.setState({
+            successMessage: "Please check Account Number or Amount",
+            showMessage: true,
+          });
+        }
+      }
+    });
+
+    xhr.open("PUT", this.props.baseUrl + "transfer");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.setRequestHeader(
+      "authorization",
+      "Bearer " + sessionStorage.getItem("access-token")
+    );
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.send(JSON.stringify(accountRequest));
+  };
+
   onDebit = (e) => {
     e.preventDefault();
     let xhr = new XMLHttpRequest();
@@ -34,7 +77,7 @@ class Accounts extends Component {
         console.log(b);
         if (b.status !== 500) {
           that.setState({
-            successMessage: "Account Successfully debited",
+            successMessage: "Account Successfully transferred",
             showMessage: true,
           });
         } else {
@@ -104,6 +147,11 @@ class Accounts extends Component {
 
   debitHandler = () => {
     let a = document.getElementsByClassName("credit-form")[1];
+    a.setAttribute("style", "display : block");
+  };
+
+  transferHandler = () => {
+    let a = document.getElementsByClassName("credit-form")[2];
     a.setAttribute("style", "display : block");
   };
 
@@ -191,38 +239,44 @@ class Accounts extends Component {
                 );
               })
             : ""}
-          <div>
-            Do you want to add an Account? <br /> <br />
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={this.addAccountHandler}
-            >
-              Add Account
-            </Button>
-          </div>
-          <div>
-            Credit the Account?
-            <br />
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={this.creditHandler}
-            >
-              CREDIT
-            </Button>
-            <div className="btn-container">
+          <div className="main-btn-container">
+            <div>
+              Add an Account? <br /> <br />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.addAccountHandler}
+                id="btnac"
+              >
+                Add
+              </Button>
+            </div>
+            <div>
+              Credit the Account?
+              <br />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.creditHandler}
+                id="btn"
+              >
+                CREDIT
+              </Button>
               <form className="credit-form" onSubmit={this.onCredit}>
                 <FormGroup>
                   <FormControl required={true}>
-                    <InputLabel htmlFor="account">Account Number</InputLabel>
+                    <InputLabel htmlFor="account" id="label">
+                      Account Number
+                    </InputLabel>
                     <Input id="account" name="account" />
                     <FormHelperText htmlFor="account">
                       The account you wish to credit
                     </FormHelperText>
                   </FormControl>
                   <FormControl required={true}>
-                    <InputLabel htmlFor="amount">Amount</InputLabel>
+                    <InputLabel htmlFor="amount" id="label">
+                      Amount
+                    </InputLabel>
                     <Input id="amount" />
                     <FormHelperText htmlFor="amount">
                       The amount you wish to credit
@@ -241,59 +295,118 @@ class Accounts extends Component {
                 variant="contained"
                 color="secondary"
                 onClick={this.debitHandler}
+                id="btn"
               >
                 DEBIT
               </Button>
-              <div className="btn-container">
-                <form className="credit-form" onSubmit={this.onDebit}>
-                  <FormGroup>
-                    <FormControl required={true}>
-                      <InputLabel htmlFor="account">Account Number</InputLabel>
-                      <Input id="account" name="account" />
-                      <FormHelperText htmlFor="account">
-                        The account you wish to debit from
-                      </FormHelperText>
-                    </FormControl>
-                    <FormControl required={true}>
-                      <InputLabel htmlFor="amount">Amount</InputLabel>
-                      <Input id="amount" />
-                      <FormHelperText htmlFor="amount">
-                        The amount you wish to debit
-                      </FormHelperText>
-                    </FormControl>
-                  </FormGroup>
-                  <Button variant="contained" color="primary" type="submit">
-                    SUBMIT
-                  </Button>
-                </form>
-              </div>
-            </div>
-            <Snackbar
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              open={this.state.showMessage}
-              onClose={this.handleClose}
-              autoHideDuration={6000}
-              ContentProps={{
-                "aria-describedby": "message-id",
-              }}
-              message={
-                <span id="message-id"> {this.state.successMessage}</span>
-              }
-              action={[
-                <IconButton
-                  key="close"
-                  aria-label="Close"
-                  color="inherit"
-                  onClick={this.handleClose}
+              <form className="credit-form" onSubmit={this.onDebit}>
+                <FormGroup>
+                  <FormControl required={true}>
+                    <InputLabel htmlFor="account" id="label">
+                      Account Number
+                    </InputLabel>
+                    <Input id="account" name="account" />
+                    <FormHelperText htmlFor="account">
+                      The account you wish to debit from
+                    </FormHelperText>
+                  </FormControl>
+                  <FormControl required={true}>
+                    <InputLabel htmlFor="amount" id="label">
+                      Amount
+                    </InputLabel>
+                    <Input id="amount" />
+                    <FormHelperText htmlFor="amount">
+                      The amount you wish to credit to
+                    </FormHelperText>
+                  </FormControl>
+                </FormGroup>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
                 >
-                  <CloseIcon />
-                </IconButton>,
-              ]}
-            />
+                  SUBMIT
+                </Button>
+              </form>
+            </div>
+            <div>
+              Transfer Money?
+              <br />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={this.transferHandler}
+                id="btn"
+              >
+                TRANSFER
+              </Button>
+              <form className="credit-form" onSubmit={this.onTransfer}>
+                <FormGroup>
+                  <FormControl required={true}>
+                    <InputLabel htmlFor="account" id="label">
+                      Account Number From{" "}
+                    </InputLabel>
+                    <Input id="account1" name="account" />
+                    <FormHelperText htmlFor="account1">
+                      The account you wish to debit from
+                    </FormHelperText>
+                  </FormControl>
+
+                  <FormControl required={true}>
+                    <InputLabel htmlFor="account" id="label">
+                      Account Number To
+                    </InputLabel>
+                    <Input id="account2" name="account" />
+                    <FormHelperText htmlFor="account2">
+                      The account you wish to credit
+                    </FormHelperText>
+                  </FormControl>
+
+                  <FormControl required={true}>
+                    <InputLabel htmlFor="amount" id="label">
+                      Amount
+                    </InputLabel>
+                    <Input id="amount" />
+                    <FormHelperText htmlFor="amount">
+                      The amount you wish to credit
+                    </FormHelperText>
+                  </FormControl>
+                </FormGroup>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                >
+                  SUBMIT
+                </Button>
+              </form>
+            </div>
           </div>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            open={this.state.showMessage}
+            onClose={this.handleClose}
+            autoHideDuration={6000}
+            ContentProps={{
+              "aria-describedby": "message-id",
+            }}
+            message={<span id="message-id"> {this.state.successMessage}</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={this.handleClose}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
         </div>
       </div>
     );
